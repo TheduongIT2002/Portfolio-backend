@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Project;
 use App\Repositories\Contracts\ProjectRepositoryInterface;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -40,6 +40,7 @@ class ProjectRepository implements ProjectRepositoryInterface
         return $this->model
             ->orderBy('sort_order', 'asc')
             ->orderBy('created_at', 'desc')
+            ->whereNull('deleted_at')
             ->paginate($perPage);
     }
 

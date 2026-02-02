@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Resources\ProjectResource;
 use App\Services\ProjectService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -44,6 +45,12 @@ class ProjectController extends Controller
         try {
             $perPage = $request->get('per_page', 15);
             $projects = $this->projectService->getAllProjects($perPage);
+            /** @var \Illuminate\Pagination\LengthAwarePaginator $projects */
+
+            // Transform items bằng Resource nhưng vẫn giữ cấu trúc paginator như cũ
+            $projects->setCollection(
+                $projects->getCollection()->map(fn ($project) => (new ProjectResource($project))->resolve($request))
+            );
 
             return $this->successResponse($projects, 'Lấy danh sách projects thành công');
         } catch (\Exception $e) {
@@ -60,9 +67,16 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): JsonResponse
     {
         try {
-            $project = $this->projectService->createProject($request->validated());
+            $data = $request->validated();
 
-            return $this->successResponse($project, 'Tạo project thành công', 201);
+            // Nếu có upload ảnh thì lưu file và lấy path để lưu DB
+            if ($request->hasFile('image')) {
+                $data['image'] = $this->projectService->storeProjectImage($request->file('image'));
+            }
+
+            $project = $this->projectService->createProject($data);
+
+            return $this->successResponse(new ProjectResource($project), 'Tạo project thành công', 201);
         } catch (\Exception $e) {
             return $this->errorResponse('Lỗi khi tạo project: ' . $e->getMessage(), 500);
         }
@@ -79,7 +93,7 @@ class ProjectController extends Controller
         try {
             $project = $this->projectService->getProjectById((int) $id);
 
-            return $this->successResponse($project, 'Lấy thông tin project thành công');
+            return $this->successResponse(new ProjectResource($project), 'Lấy thông tin project thành công');
         } catch (\Exception $e) {
             $statusCode = $e->getCode() === 404 ? 404 : 500;
             return $this->errorResponse($e->getMessage(), $statusCode);
@@ -96,9 +110,20 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, string $id): JsonResponse
     {
         try {
-            $project = $this->projectService->updateProject((int) $id, $request->validated());
+            $data = $request->validated();
 
-            return $this->successResponse($project, 'Cập nhật project thành công');
+            // Nếu có upload ảnh mới: upload ảnh mới và xóa ảnh cũ (nếu có)
+            if ($request->hasFile('image')) {
+                $projectCurrent = $this->projectService->getProjectById((int) $id);
+                $data['image'] = $this->projectService->replaceProjectImage(
+                    $request->file('image'),
+                    $projectCurrent->image
+                );
+            }
+
+            $project = $this->projectService->updateProject((int) $id, $data);
+
+            return $this->successResponse(new ProjectResource($project), 'Cập nhật project thành công');
         } catch (\Exception $e) {
             $statusCode = $e->getCode() === 404 ? 404 : 500;
             return $this->errorResponse($e->getMessage(), $statusCode);
@@ -133,7 +158,10 @@ class ProjectController extends Controller
         try {
             $projects = $this->projectService->getActiveProjects();
 
-            return $this->successResponse($projects, 'Lấy danh sách projects active thành công');
+            // Trả list đã transform qua Resource
+            $data = $projects->map(fn ($project) => (new ProjectResource($project))->resolve(request()))->all();
+
+            return $this->successResponse($data, 'Lấy danh sách projects active thành công');
         } catch (\Exception $e) {
             return $this->errorResponse('Lỗi khi lấy danh sách projects active: ' . $e->getMessage(), 500);
         }
@@ -149,7 +177,10 @@ class ProjectController extends Controller
         try {
             $projects = $this->projectService->getFeaturedProjects();
 
-            return $this->successResponse($projects, 'Lấy danh sách projects nổi bật thành công');
+            // Trả list đã transform qua Resource
+            $data = $projects->map(fn ($project) => (new ProjectResource($project))->resolve(request()))->all();
+
+            return $this->successResponse($data, 'Lấy danh sách projects nổi bật thành công');
         } catch (\Exception $e) {
             return $this->errorResponse('Lỗi khi lấy danh sách projects nổi bật: ' . $e->getMessage(), 500);
         }
