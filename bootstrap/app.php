@@ -12,7 +12,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Cấu hình CORS - Laravel 11 tự động thêm HandleCors nếu có config/cors.php
+        // Đảm bảo CORS middleware được thêm vào đầu tiên để xử lý OPTIONS requests
+        $middleware->api(prepend: [
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

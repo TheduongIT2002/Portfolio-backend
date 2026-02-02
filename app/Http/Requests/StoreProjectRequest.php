@@ -30,7 +30,7 @@ class StoreProjectRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'image' => 'nullable|string|max:255',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,gif|max:2048',
             'url' => 'nullable|url|max:255',
             'github_url' => 'nullable|url|max:255',
             'technologies' => 'nullable|array',
@@ -58,6 +58,9 @@ class StoreProjectRequest extends FormRequest
             'end_date.after_or_equal' => 'Ngày kết thúc phải sau hoặc bằng ngày bắt đầu.',
             'sort_order.integer' => 'Thứ tự sắp xếp phải là số nguyên.',
             'sort_order.min' => 'Thứ tự sắp xếp phải lớn hơn hoặc bằng 0.',
+            'image.image' => 'File ảnh không hợp lệ.',
+            'image.mimes' => 'Ảnh chỉ hỗ trợ định dạng: jpg, jpeg, png, webp, gif.',
+            'image.max' => 'Dung lượng ảnh tối đa 2MB.',
         ];
     }
 }
