@@ -43,9 +43,8 @@ class ProjectController extends Controller
     public function index(Request $request): JsonResponse
     {
         try {
-            $perPage = $request->get('per_page', 15);
+            $perPage = $request->get('per_page',5);
             $projects = $this->projectService->getAllProjects($perPage);
-            /** @var \Illuminate\Pagination\LengthAwarePaginator $projects */
 
             // Transform items bằng Resource nhưng vẫn giữ cấu trúc paginator như cũ
             $projects->setCollection(
