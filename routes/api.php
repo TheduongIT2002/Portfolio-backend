@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 // Routes cho Project module
 Route::apiResource('projects', ProjectController::class);
+// Route POST để update (nếu frontend cần dùng POST thay vì PUT)
+Route::post('/projects/{project}', [ProjectController::class, 'update']);
 
 // Routes bổ sung cho Project
 Route::get('projects/active/list', [ProjectController::class, 'getActiveProjects']);

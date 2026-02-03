@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use Illuminate\Http\UploadedFile;
 use App\Repositories\Contracts\ProjectRepositoryInterface;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Class ProjectService
@@ -65,6 +67,37 @@ class ProjectService
     public function createProject(array $data): \App\Models\Project
     {
         return $this->repository->create($data);
+    }
+
+    /**
+     * Upload ảnh project lên disk public và trả về path để lưu DB
+     *
+     * @param UploadedFile $file
+     * @return string
+     */
+    public function storeProjectImage(UploadedFile $file): string
+    {
+        // Lưu file vào storage/app/public/projects
+        return $file->store('projects', 'public');
+    }
+
+    /**
+     * Replace ảnh project: upload ảnh mới, xóa ảnh cũ (nếu có) và trả về path ảnh mới
+     *
+     * @param UploadedFile $file
+     * @param string|null $oldPath
+     * @return string
+     */
+    public function replaceProjectImage(UploadedFile $file, ?string $oldPath = null): string
+    {
+        $newPath = $this->storeProjectImage($file);
+
+        // Xóa ảnh cũ để tránh rác trong storage (chỉ xóa nếu tồn tại)
+        if (!empty($oldPath) && Storage::disk('public')->exists($oldPath)) {
+            Storage::disk('public')->delete($oldPath);
+        }
+
+        return $newPath;
     }
 
     /**
