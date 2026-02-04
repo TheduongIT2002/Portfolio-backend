@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ContactController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,4 +23,12 @@ Route::apiResource('projects', ProjectController::class);
 Route::prefix('projects')->group(function () {
     Route::get('active/list', [ProjectController::class, 'getActiveProjects']);
     Route::get('featured/list', [ProjectController::class, 'getFeaturedProjects']);
+});
+
+// Routes cho Contact module (form liên hệ)
+Route::prefix('contacts')->group(function () {
+    Route::post('store', [ContactController::class, 'store']);
+    Route::get('index', [ContactController::class, 'index']);
+    Route::put('update-status/{id}', [ContactController::class, 'updateStatus']);
+    Route::delete('destroy/{id}', [ContactController::class, 'destroy']);
 });
