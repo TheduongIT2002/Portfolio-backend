@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Repositories\Contracts\ProjectRepositoryInterface;
 use App\Repositories\Contracts\ContactRepositoryInterface;
 use App\Repositories\Contracts\TechStackRepositoryInterface;
+use App\Repositories\Contracts\PersonalInfoRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use App\Repositories\ContactRepository;
 use App\Repositories\TechStackRepository;
+use App\Repositories\PersonalInfoRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ContactRepositoryInterface::class, ContactRepository::class);
         // Bind TechStackRepositoryInterface với TechStackRepository implementation
         $this->app->bind(TechStackRepositoryInterface::class, TechStackRepository::class);
+        // Bind PersonalInfoRepositoryInterface với PersonalInfoRepository implementation
+        $this->app->bind(PersonalInfoRepositoryInterface::class, PersonalInfoRepository::class);
     }
 
     /**
