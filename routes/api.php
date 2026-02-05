@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ContactController;
+use App\Http\Controllers\Api\TechStackController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,4 +32,17 @@ Route::prefix('contacts')->group(function () {
     Route::get('index', [ContactController::class, 'index']);
     Route::put('update-status/{id}', [ContactController::class, 'updateStatus']);
     Route::delete('destroy/{id}', [ContactController::class, 'destroy']);
+});
+
+// Routes cho Tech Stack & Tools
+Route::prefix('tech-stacks')->group(function () {
+    // Public list để hiển thị main page
+    Route::get('public/list', [TechStackController::class, 'getActiveList']);
+
+    // Admin CRUD
+    Route::get('index', [TechStackController::class, 'index']);
+    Route::post('store', [TechStackController::class, 'create']);
+    Route::get('show/{id}', [TechStackController::class, 'show']);
+    Route::put('update/{id}', [TechStackController::class, 'update']);
+    Route::delete('destroy/{id}', [TechStackController::class, 'destroy']);
 });
