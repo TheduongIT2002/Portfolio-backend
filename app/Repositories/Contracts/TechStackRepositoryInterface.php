@@ -15,7 +15,7 @@ interface TechStackRepositoryInterface
     /**
      * Lấy danh sách tech stacks với phân trang (admin)
      */
-    public function getAll(int $perPage = 10): LengthAwarePaginator;
+    public function index(int $perPage = 10): LengthAwarePaginator;
 
     /**
      * Lấy danh sách tech stacks active (public)
@@ -40,6 +40,6 @@ interface TechStackRepositoryInterface
     /**
      * Tìm theo ID
      */
-    public function findById(int $id): ?TechStack;
+    public function show(int $id): ?TechStack;
 }
 

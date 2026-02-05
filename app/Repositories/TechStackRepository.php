@@ -23,7 +23,7 @@ class TechStackRepository implements TechStackRepositoryInterface
         $this->model = $model;
     }
 
-    public function getAll(int $perPage = 15): LengthAwarePaginator
+    public function index(int $perPage = 10): LengthAwarePaginator
     {
         return $this->model
             ->orderBy('sort_order', 'asc')
@@ -47,7 +47,7 @@ class TechStackRepository implements TechStackRepositoryInterface
 
     public function update(int $id, array $data): TechStack
     {
-        $item = $this->findById($id);
+        $item = $this->show($id);
         if (!$item) {
             throw new \Exception('Tech stack not found', 404);
         }
@@ -59,7 +59,7 @@ class TechStackRepository implements TechStackRepositoryInterface
 
     public function delete(int $id): bool
     {
-        $item = $this->findById($id);
+        $item = $this->show($id);
         if (!$item) {
             return false;
         }
@@ -67,7 +67,7 @@ class TechStackRepository implements TechStackRepositoryInterface
         return (bool) $item->delete();
     }
 
-    public function findById(int $id): ?TechStack
+    public function show(int $id): ?TechStack
     {
         return $this->model->find($id);
     }

@@ -37,11 +37,11 @@ Route::prefix('contacts')->group(function () {
 // Routes cho Tech Stack & Tools
 Route::prefix('tech-stacks')->group(function () {
     // Public list để hiển thị main page
-    Route::get('public/list', [TechStackController::class, 'publicList']);
+    Route::get('public/list', [TechStackController::class, 'getActiveList']);
 
     // Admin CRUD
     Route::get('index', [TechStackController::class, 'index']);
-    Route::post('store', [TechStackController::class, 'store']);
+    Route::post('store', [TechStackController::class, 'create']);
     Route::get('show/{id}', [TechStackController::class, 'show']);
     Route::put('update/{id}', [TechStackController::class, 'update']);
     Route::delete('destroy/{id}', [TechStackController::class, 'destroy']);
