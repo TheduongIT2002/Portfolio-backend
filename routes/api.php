@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\TechStackController;
+use App\Http\Controllers\Api\PersonalInfoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,4 +46,12 @@ Route::prefix('tech-stacks')->group(function () {
     Route::get('show/{id}', [TechStackController::class, 'show']);
     Route::put('update/{id}', [TechStackController::class, 'update']);
     Route::delete('destroy/{id}', [TechStackController::class, 'destroy']);
+});
+
+// Routes cho Personal Info (thông tin cá nhân)
+Route::prefix('personal-info')->group(function () {
+    // Public: lấy thông tin cá nhân cho trang main page
+    Route::get('show', [PersonalInfoController::class, 'show']);
+    // Admin: cập nhật thông tin cá nhân
+    Route::post('update', [PersonalInfoController::class, 'update']);
 });
