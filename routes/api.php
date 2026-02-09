@@ -52,6 +52,6 @@ Route::prefix('tech-stacks')->group(function () {
 Route::prefix('personal-info')->group(function () {
     // Public: lấy thông tin cá nhân cho trang main page
     Route::get('show', [PersonalInfoController::class, 'show']);
-    // Admin: cập nhật thông tin cá nhân
-    Route::post('update', [PersonalInfoController::class, 'update']);
+    
+    Route::match(['POST', 'PUT'], 'update', [PersonalInfoController::class, 'update']);
 });
