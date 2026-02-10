@@ -36,6 +36,7 @@ class UpdatePersonalInfoRequest extends FormRequest
             'social_links.*.type' => 'required_with:social_links|string|max:50',
             'social_links.*.label' => 'required_with:social_links|string|max:100',
             'social_links.*.url' => 'required_with:social_links|url|max:255',
+            'social_links.*.url_icon' => 'nullable|url', 
         ];
     }
 }
