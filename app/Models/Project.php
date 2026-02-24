@@ -27,6 +27,7 @@ class Project extends Model
         'is_featured',
         'sort_order',
         'is_active',
+
     ];
 
     /**

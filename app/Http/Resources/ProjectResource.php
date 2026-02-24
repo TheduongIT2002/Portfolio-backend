@@ -30,12 +30,8 @@ class ProjectResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-
-            // Path lưu trong DB (vd: projects/abc.jpg)
             'image' => $this->image,
-            // URL public để frontend hiển thị (vd: http://127.0.0.1:8000/storage/projects/abc.jpg)
-            'image_url' => !empty($this->image) ? asset('storage/' . ltrim($this->image, '/')) : null,
-
+            'image_url' => !empty($this->image) ? '/storage/' . ltrim($this->image, '/') : null,
             'url' => $this->url,
             'github_url' => $this->github_url,
             'technologies' => $this->technologies,
