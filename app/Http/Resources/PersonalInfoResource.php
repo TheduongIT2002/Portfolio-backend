@@ -23,9 +23,9 @@ class PersonalInfoResource extends JsonResource
             'short_intro' => $this->short_intro,
             'avatar' => $this->avatar,
             // URL public cho avatar
-            'avatar_url' => $this->avatar ? asset('storage/' . ltrim($this->avatar, '/')) : null,
+            'avatar_url' => !empty($this->avatar)? '/storage/' . ltrim($this->avatar, '/') : null,
             'cv_file' => $this->cv_file,
-            'cv_url' => $this->cv_file ? asset('storage/' . ltrim($this->cv_file, '/')) : null,
+            'cv_url' => !empty($this->cv_file)? '/storage/' . ltrim($this->cv_file, '/') : null,
             'email' => $this->email,
             'phone' => $this->phone,
             'address' => $this->address,
